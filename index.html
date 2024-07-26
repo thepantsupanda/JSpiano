@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Piano</title>
+    <style></style>
+
+</head>
+<body>
+
+    <!-- HTML STUFF -->
+    <button id="btnNote1">
+        <span>Note 1</span>
+    </button>
+    <button id="btnNote2">
+        <span>Note 2</span>
+    </button>
+
+    <!-- JS STUFF -->
+    <script type="text/javascript">
+
+        const audioContext = new AudioContext();
+
+        const btnNote1 = document.querySelector("#btnNote1");
+        const btnNote2 = document.querySelector("#btnNote2");
+
+        function createOsc(hz) {
+            let osc = audioContext.createOscillator();
+            osc.frequency.value = hz;
+            return osc;
+        }
+
+        function createGainNode() {
+            let gainNode = audioContext.createGain();
+            return gainNode;
+        }
+
+        btnNote1.addEventListener("click", () => {
+            let instanceOsc = createOsc(261.626); // C4 - Middle C
+            let instanceGain = createGainNode();
+
+            instanceOsc.connect(instanceGain).connect(audioContext.destination);
+            instanceOsc.start();
+
+            instanceGain.gain.linearRampToValueAtTime(1,0.01);
+            instanceGain.gain.linearRampToValueAtTime(0,2);
+
+            instanceOsc.stop();
+        }, false);
+
+        btnNote2.addEventListener("click", () => {
+            let instanceOsc = createOsc(440); // A4
+            let instanceGain = createGainNode();
+
+            instanceOsc.connect(instanceGain).connect(audioContext.destination);
+            instanceOsc.start();
+
+            instanceGain.gain.linearRampToValueAtTime(1,0.01);
+            instanceGain.gain.linearRampToValueAtTime(0,2);
+        }, false);
+
+    </script>
+
+</body>
+</html>
